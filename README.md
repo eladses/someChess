@@ -1,1 +1,1 @@
-# if you read that, you shuld know that is chast few files that few dragons make and show as
+# if you read that, you should know that is just a few files that a few dragons made and showed us.
