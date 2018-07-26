@@ -21,10 +21,12 @@ namespace GenderChess.CODE
             foreach(Troop Troop in WhiteTroops)
             {
                 Map[Troop.Location.Row, Troop.Location.Column] = Troop;
+                Troop.color = true;
             }
             foreach (Troop Troop in BlackTroops)
             {
                 Map[Troop.Location.Row, Troop.Location.Column] = Troop;
+                Troop.color = false;
             }
         }
 

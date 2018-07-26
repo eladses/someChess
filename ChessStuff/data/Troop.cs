@@ -12,6 +12,7 @@ namespace GenderChess.CODE
         public List<GenderTypes> Gender { get; set; }
         public Coords Location { get; set; }
         public int ID { get; }
+        public bool color { get; set; }
 
         public Troop(bool Alive, UnitTypes Type, List<GenderTypes> Gender, Coords Location, int ID)
         {
