@@ -17,21 +17,20 @@ namespace ChessStuff
 
 
 
-
-
-
-
-    /// <summary>
-    /// nothing's working DO NOT RUN 
-    /// </summary>
     public class ChessRules
     {
         GameDataManager gameData;
-
+        public static List<GenderTypes> gendersList = new List<GenderTypes>() { GenderTypes.Default, GenderTypes.Default, GenderTypes.Default };
         //set the board and call to the first turn
         public void StartGame()
         {
-            gameData = new GameDataManager(8, 8, false,null,null);
+            for(int i = 0; i<12; i++)
+            {
+                gendersList.Add((GenderTypes)new Random().Next(5));
+            }
+            startBoard.createWList();
+            startBoard.createBList();
+            gameData = new GameDataManager(8, 8, true, startBoard.W, startBoard.B);
         }
 
         public class Movements
@@ -56,8 +55,8 @@ namespace ChessStuff
             LastMoveables = new List<Movements>();
             foreach(Troop t in Units)
             {
-                Movements move = new Movements(t, new List<Coords> { new Coords(0, 0), new Coords(1, 1) });
-                if (!move.PossibleMovements.Equals(null))
+                Movements move = new Movements(t, unitToVectors(t));
+                if (move.PossibleMovements.Count != 0)
                 {
                     LastMoveables.Add(move);
                 }
@@ -230,26 +229,12 @@ namespace ChessStuff
 
         public void MoveChosenPiece(int TroopX, int TroopY, int NewX, int NewY)
         {
-            gameData.SetTroopToMap(gameData.GetTroopFromMap(new Coords(TroopX, TroopY)), new Coords(NewX, NewY));
+            Troop troop = gameData.GetTroopFromMap(new Coords(TroopX, TroopY));
+            if (troop.Gender == GenderTypes.Checkers)
+            {
+                gameData.SetTroopToMap(troop, new Coords(NewX, NewY));
+            }
+            gameData.SetTroopToMap(troop, new Coords(NewX, NewY));
         }
     } 
-
-
-
-    //
-    // var units = GetUnits();
-    // ...
-    // MoveUnit(currentUnit,x,y);
-    // var newUnits = GetUnits();
-    // //check who moved, and who no longer exists and animate accordingly
-    // ...
-    // StartTurn(otherPlayer);
-    //
-    //
-
-
-
-
-
-
 }

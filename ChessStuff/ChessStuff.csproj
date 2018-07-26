@@ -49,6 +49,7 @@
     <Compile Include="data\UnitTypes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="startBoard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

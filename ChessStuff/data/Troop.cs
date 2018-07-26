@@ -11,16 +11,14 @@ namespace GenderChess.CODE
         public UnitTypes Type { get; set; }
         public GenderTypes Gender { get; set; }
         public Coords Location { get; set; }
-        public int ID { get; }
         public bool color { get; set; }
 
-        public Troop(bool Alive, UnitTypes Type, GenderTypes Gender, Coords Location, int ID)
+        public Troop(bool Alive, UnitTypes Type, GenderTypes Gender, Coords Location)
         {
             this.Alive = Alive;
             this.Type = Type;
             this.Gender = Gender;
             this.Location = Location;
-            this.ID = ID;
         }
     }
 }
