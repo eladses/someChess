@@ -37,8 +37,8 @@ namespace ChessStuff
 
         public class Movements
         {
-            Troop Troop { get; set; }
-            List<Coords> PossibleMovements { get; set; }
+            public Troop Troop { get; set; }
+            public List<Coords> PossibleMovements { get; set; }
 
             public Movements(Troop Troop, List<Coords> PossibleMovements)
             {
@@ -46,97 +46,106 @@ namespace ChessStuff
                 this.PossibleMovements = PossibleMovements;
             }
         }
+
+        private List<Movements> LastMoveables;
+
         //return list of moveable units
         public List<Troop> StartTurn(int playerId)
         {
             gameData.NextTurn();
             List<Troop> Units = gameData.GetCurrentLiving();
-            List<Movements> AllMovements = new List<Movements>();
+            LastMoveables = new List<Movements>();
             foreach(Troop t in Units)
             {
-                AllMovements.Add(new Movements(t, WhereCanMove(t)));
-                if (/*היחידה יכולה לזוז*/)
-                    .Add(t);  
+                Movements move = new Movements(t, new List<Coords> { new Coords(0, 0), new Coords(1, 1) });
+                if (!move.PossibleMovements.Equals(null))
+                {
+                    LastMoveables.Add(move);
+                }
             }
-            if (Units == null)
+            List<Troop> output = new List<Troop>();
+            foreach(Movements m in LastMoveables)
             {
-                //סיים טור
+                output.Add(m.Troop);
             }
+            return output;
         }
 
         //get poss in the board and call "WhereCanMove" with the unit
-        public List<Coords> WhereCanMove(Coords coords)
-        {
-            return WhereCanMove(gameData.GetTroopFromMap(coords));
-            // beep
-        }
 
         //get the unit and return bool matrix of the posses 
-        private List<Coords> WhereCanMove(Troop troop)
-        {
-            var table = new int[8, 8];
-            for (int y = 0; y < table.Length; y++)
-            {
-                for (int x = 0; x < table.Length; x++)
+        /*        private List<Coords> WhereCanMove(Troop troop)
                 {
-                    table[x, y] = CanIMove(troop, new Coords();
-                }
-            }
-            return table;
-        }
+                    var table = new int[8, 8];
+                    for (int y = 0; y < table.Length; y++)
+                    {
+                        for (int x = 0; x < table.Length; x++)
+                        {
+                            table[x, y] = CanIMove(troop, new Coords();
+                        }
+                    }
+                    return table;
+                } */
 
         //get poss and unit and check if this unit can move there
-        private bool CanIMove(Troop troop, Coords coords)
-        {
-            var isValid = true;
-
-            switch (troop.Type)
-            {
-                case UnitTypes.King:
-                    
-                    break;
-                case UnitTypes.Queen:
-                    break;
-                case UnitTypes.Bishop:
-                    break;
-                case UnitTypes.Pawn:
-                    break;
-                case UnitTypes.Knight:
-                    break;
-                case UnitTypes.Rook:
-                    break;
-            }
-
-            var unitAtTile = gameData.UnitIn(x, y);
-            if (unitAtTile.player = currentPLayer)
-            {
-                isValid = false;
-            }
-            else
-            {
-                if (unit.pacifist)
+        /*        private bool CanIMove(Troop troop, Coords coords)
                 {
-                    isValid = false;
+                    var isValid = true;
+
+                    switch (troop.Type)
+                    {
+                        case UnitTypes.King:
+
+                            break;
+                        case UnitTypes.Queen:
+                            break;
+                        case UnitTypes.Bishop:
+                            break;
+                        case UnitTypes.Pawn:
+                            break;
+                        case UnitTypes.Knight:
+                            break;
+                        case UnitTypes.Rook:
+                            break;
+                    }
+
+                    var unitAtTile = gameData.UnitIn(x, y);
+                    if (unitAtTile.player = currentPLayer)
+                    {
+                        isValid = false;
+                    }
+                    else
+                    {
+                        if (unit.pacifist)
+                        {
+                            isValid = false;
+                        }
+                    }
+                    return isValid;
                 }
-            }
-            return isValid;
-        }
 
-        public void MoveUnit(int x, int y)
-        {
-            Coords coords = new Coords(x, y);
-            gameData.SetTroopToMap(gameData.GetTroopFromMap(coords), coords);
-            //turn end
-        }
-
+                public void MoveUnit(int x, int y)
+                {
+                    Coords coords = new Coords(x, y);
+                    gameData.SetTroopToMap(gameData.GetTroopFromMap(coords), coords);
+                    //turn end
+                } */
 
         public Movements SetChosenPeice(int x, int y)
         {
             Coords coords = new Coords(x, y);
             Troop troop = gameData.GetTroopFromMap(coords);
-            return new Movements(troop, WhereCanMove(troop)) ;
+            Movements output;
+            foreach(Movements move in LastMoveables)
+            {
+                if (troop.Equals(move.Troop))
+                {
+                    return move;
+                }
+            }
+            return null;
         }
-    }
+    } 
 
 
 
