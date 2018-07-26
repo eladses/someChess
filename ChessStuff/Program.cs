@@ -135,7 +135,6 @@ namespace ChessStuff
         {
             Coords coords = new Coords(x, y);
             Troop troop = gameData.GetTroopFromMap(coords);
-            Movements output;
             foreach(Movements move in LastMoveables)
             {
                 if (troop.Equals(move.Troop))
