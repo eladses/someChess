@@ -232,7 +232,25 @@ namespace ChessStuff
             Troop troop = gameData.GetTroopFromMap(new Coords(TroopX, TroopY));
             if (troop.Gender == GenderTypes.Checkers)
             {
-                gameData.SetTroopToMap(troop, new Coords(NewX, NewY));
+                int xdif;
+                int ydif;
+                if (NewX > TroopX)
+                {
+                    xdif = 1;
+                }
+                else
+                {
+                    xdif = -1;
+                }
+                if (NewY > TroopY)
+                {
+                    ydif = 1;
+                }
+                else
+                {
+                    ydif = -1;
+                }
+                gameData.SetTroopToMap(troop, new Coords(NewX - xdif, NewY - ydif));
             }
             gameData.SetTroopToMap(troop, new Coords(NewX, NewY));
         }

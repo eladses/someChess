@@ -20,12 +20,12 @@ namespace GenderChess.CODE
             this.BlackTroops = BlackTroops;
             foreach(Troop Troop in WhiteTroops)
             {
-                Map[Troop.Location.Row, Troop.Location.Column] = Troop;
+                Map[Troop.Location.Column, Troop.Location.Row] = Troop;
                 Troop.color = true;
             }
             foreach (Troop Troop in BlackTroops)
             {
-                Map[Troop.Location.Row, Troop.Location.Column] = Troop;
+                Map[Troop.Location.Column, Troop.Location.Row] = Troop;
                 Troop.color = false;
             }
         }
@@ -113,13 +113,13 @@ namespace GenderChess.CODE
 
         public void SetTroopToMap(Troop Troop, Coords NewCoords)
         {
-            Map[Troop.Location.Row, Troop.Location.Column] = null;
+            Map[Troop.Location.Column, Troop.Location.Row] = null;
             Troop temp = Map[NewCoords.Column, NewCoords.Row];
             if (!temp.Equals(null))
             {
                 temp.Alive = false;
             }
-            temp = Troop;
+            Map[NewCoords.Column, NewCoords.Row] = Troop;
         }
 
         public void NextTurn()
