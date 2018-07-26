@@ -12,8 +12,8 @@ namespace GenderChess.CODE
 
         public Coords(int x, int y)
         {
-            Row = x;
-            Column = y;
+            Row = y;
+            Column = x;
         }
     }
 }

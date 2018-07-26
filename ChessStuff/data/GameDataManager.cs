@@ -108,13 +108,13 @@ namespace GenderChess.CODE
 
         public Troop GetTroopFromMap(Coords Coords)
         {
-            return Map[Coords.Row, Coords.Column];
+            return Map[Coords.Column, Coords.Row];
         }
 
         public void SetTroopToMap(Troop Troop, Coords NewCoords)
         {
             Map[Troop.Location.Row, Troop.Location.Column] = null;
-            Troop temp = Map[NewCoords.Row, NewCoords.Column];
+            Troop temp = Map[NewCoords.Column, NewCoords.Row];
             if (!temp.Equals(null))
             {
                 temp.Alive = false;

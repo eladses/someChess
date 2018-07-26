@@ -9,12 +9,12 @@ namespace GenderChess.CODE
     public class Troop    {
         public bool Alive { get; set; }
         public UnitTypes Type { get; set; }
-        public List<GenderTypes> Gender { get; set; }
+        public GenderTypes Gender { get; set; }
         public Coords Location { get; set; }
         public int ID { get; }
         public bool color { get; set; }
 
-        public Troop(bool Alive, UnitTypes Type, List<GenderTypes> Gender, Coords Location, int ID)
+        public Troop(bool Alive, UnitTypes Type, GenderTypes Gender, Coords Location, int ID)
         {
             this.Alive = Alive;
             this.Type = Type;

@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace GenderChess.CODE
 {
     public enum GenderTypes    {
-
+        Pacifist, Checkers
     }
 }
