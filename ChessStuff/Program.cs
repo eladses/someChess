@@ -37,8 +37,8 @@ namespace ChessStuff
 
         public class Movements
         {
-            Troop Troop;
-            List<Coords> PossibleMovements;
+            Troop Troop { get; set; }
+            List<Coords> PossibleMovements { get; set; }
 
             public Movements(Troop Troop, List<Coords> PossibleMovements)
             {
@@ -56,7 +56,7 @@ namespace ChessStuff
             {
                 AllMovements.Add(new Movements(t, WhereCanMove(t)));
                 if (/*היחידה יכולה לזוז*/)
-                    UCanMove.Add(t);  
+                    .Add(t);  
             }
             if (Units == null)
             {
@@ -130,6 +130,12 @@ namespace ChessStuff
         }
 
 
+        public Movements SetChosenPeice(int x, int y)
+        {
+            Coords coords = new Coords(x, y);
+            Troop troop = gameData.GetTroopFromMap(coords);
+            return new Movements(troop, WhereCanMove(troop)) ;
+        }
     }
 
 
