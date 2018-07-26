@@ -50,7 +50,7 @@ namespace ChessStuff
         private List<Movements> LastMoveables;
 
         //return list of moveable units
-        public List<Troop> StartTurn(int playerId)
+        public List<Troop> StartTurn()
         {
             gameData.NextTurn();
             List<Troop> Units = gameData.GetCurrentLiving();
