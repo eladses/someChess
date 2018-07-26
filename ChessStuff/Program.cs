@@ -9,9 +9,45 @@ namespace ChessStuff
 {
     class Program
     {
+        static ChessRules chessRules = new ChessRules();
         static void Main(string[] args)
-        {
+        {           
+            chessRules.StartGame();
+            chessRules.StartTurn();
+            takeATurn();
             
+        }
+
+        static void takeATurn()
+        {
+            Console.WriteLine("pick a Piece");
+            sendChosenPiece();
+
+            Console.WriteLine("legal moves:");
+            Console.WriteLine();//List ligal moves
+
+            Console.WriteLine("make a move");
+            sendChosenMove();
+
+        }
+        static void sendChosenPiece()
+        {
+            Console.Write("x: ");
+            int x = int.Parse(Console.ReadLine());
+            Console.Write("y: ");
+            int y = int.Parse(Console.ReadLine());
+
+            chessRules.SetChosenPeice(x, y);   
+        }
+
+        static void sendChosenMove()
+        {
+            Console.Write("x: ");
+            int x = int.Parse(Console.ReadLine());
+            Console.Write("y: ");
+            int y = int.Parse(Console.ReadLine());
+
+            //chessRules.
         }
     }
 
@@ -21,9 +57,6 @@ namespace ChessStuff
 
 
 
-    /// <summary>
-    /// nothing's working DO NOT RUN 
-    /// </summary>
     public class ChessRules
     {
         GameDataManager gameData;
@@ -32,7 +65,7 @@ namespace ChessStuff
         //set the board and call to the first turn
         public void StartGame()
         {
-            gameData = new GameDataManager(8, 8, false,null,null);
+            gameData = new GameDataManager(8, 8, false, new List<Troop>() { new Troop(true, UnitTypes.Pawn, null, new Coords(5, 6), 0) }, new List<Troop>());
         }
 
         public class Movements
@@ -50,7 +83,7 @@ namespace ChessStuff
         private List<Movements> LastMoveables;
 
         //return list of moveable units
-        public List<Troop> StartTurn(int playerId)
+        public List<Troop> StartTurn()
         {
             gameData.NextTurn();
             List<Troop> Units = gameData.GetCurrentLiving();
