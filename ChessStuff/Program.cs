@@ -145,6 +145,11 @@ namespace ChessStuff
             }
             return null;
         }
+
+        public void MoveChosenPiece(int TroopX, int TroopY, int NewX, int NewY)
+        {
+            gameData.SetTroopToMap(gameData.GetTroopFromMap(new Coords(TroopX, TroopY)), new Coords(NewX, NewY));
+        }
     } 
 
 
