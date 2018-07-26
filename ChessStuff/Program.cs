@@ -61,7 +61,6 @@ namespace ChessStuff
     public class ChessRules
     {
         GameDataManager gameData;
-        private int currentPlayer;
 
         //set the board and call to the first turn
         public void StartGame()
