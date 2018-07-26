@@ -13,41 +13,42 @@ namespace ChessStuff
         static void Main(string[] args)
         {           
             chessRules.StartGame();
-            chessRules.StartTurn();
-            takeATurn();
+            while (true)
+            {
+                chessRules.StartTurn();
+                takeATurn();
+            }
             
         }
 
         static void takeATurn()
         {
             Console.WriteLine("pick a Piece");
-            sendChosenPiece();
+            Console.Write("x: ");
+            int x1 = int.Parse(Console.ReadLine());
+            Console.Write("y: ");
+            int y1 = int.Parse(Console.ReadLine());
+
+            chessRules.SetChosenPeice(x1, y1);
+
 
             Console.WriteLine("legal moves:");
             Console.WriteLine();//List ligal moves
 
             Console.WriteLine("make a move");
-            sendChosenMove();
 
-        }
-        static void sendChosenPiece()
-        {
+
             Console.Write("x: ");
-            int x = int.Parse(Console.ReadLine());
+            int x2 = int.Parse(Console.ReadLine());
             Console.Write("y: ");
-            int y = int.Parse(Console.ReadLine());
+            int y2 = int.Parse(Console.ReadLine());
+            chessRules.MoveChosenPiece(x1, y1, x2, y2);
 
-            chessRules.SetChosenPeice(x, y);   
         }
 
         static void sendChosenMove()
         {
-            Console.Write("x: ");
-            int x = int.Parse(Console.ReadLine());
-            Console.Write("y: ");
-            int y = int.Parse(Console.ReadLine());
 
-            //chessRules.
         }
     }
 
@@ -65,7 +66,7 @@ namespace ChessStuff
         //set the board and call to the first turn
         public void StartGame()
         {
-            gameData = new GameDataManager(8, 8, false, new List<Troop>() { new Troop(true, UnitTypes.Pawn, null, new Coords(5, 6), 0) }, new List<Troop>());
+            gameData = new GameDataManager(8, 8, false, new List<Troop>() { new Troop(true, UnitTypes.Pawn, null, new Coords(0, 0), 0) }, new List<Troop>() { new Troop(true, UnitTypes.Pawn, null, new Coords(1, 1), 0) });
         }
 
         public class Movements
