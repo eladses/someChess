@@ -27,7 +27,6 @@ namespace ChessStuff
     public class ChessRules
     {
         GameDataManager gameData;
-        private int currentPlayer;
 
         //set the board and call to the first turn
         public void StartGame()
@@ -37,8 +36,8 @@ namespace ChessStuff
 
         public class Movements
         {
-            Troop Troop { get; set; }
-            List<Coords> PossibleMovements { get; set; }
+            public Troop Troop { get; set; }
+            public List<Coords> PossibleMovements { get; set; }
 
             public Movements(Troop Troop, List<Coords> PossibleMovements)
             {
@@ -46,105 +45,194 @@ namespace ChessStuff
                 this.PossibleMovements = PossibleMovements;
             }
         }
+
+        private List<Movements> LastMoveables;
+
         //return list of moveable units
-        public List<Troop> StartTurn(int playerId)
+        public List<Troop> StartTurn()
         {
             gameData.NextTurn();
             List<Troop> Units = gameData.GetCurrentLiving();
-            List<Movements> AllMovements = new List<Movements>();
+            LastMoveables = new List<Movements>();
             foreach(Troop t in Units)
             {
-                AllMovements.Add(new Movements(t, WhereCanMove(t)));
-                if (/*היחידה יכולה לזוז*/)
-                    .Add(t);  
-            }
-            if (Units == null)
-            {
-                //סיים טור
-            }
-        }
-
-        //get poss in the board and call "WhereCanMove" with the unit
-        public List<Coords> WhereCanMove(Coords coords)
-        {
-            return WhereCanMove(gameData.GetTroopFromMap(coords));
-            // beep
-        }
-
-        //get the unit and return bool matrix of the posses 
-        private List<Coords> WhereCanMove(Troop troop)
-        {
-            var table = new int[8, 8];
-            for (int y = 0; y < table.Length; y++)
-            {
-                for (int x = 0; x < table.Length; x++)
+                Movements move = new Movements(t, new List<Coords> { new Coords(0, 0), new Coords(1, 1) });
+                if (!move.PossibleMovements.Equals(null))
                 {
-                    table[x, y] = CanIMove(troop, new Coords();
+                    LastMoveables.Add(move);
                 }
             }
-            return table;
+            List<Troop> output = new List<Troop>();
+            foreach(Movements m in LastMoveables)
+            {
+                output.Add(m.Troop);
+            }
+            return output;
         }
 
-        //get poss and unit and check if this unit can move there
-        private bool CanIMove(Troop troop, Coords coords)
+        public List<Coords> unitToVectors(Troop troop)
         {
-            var isValid = true;
-
-            switch (troop.Type)
+            List<Coords> output = new List<Coords>();
+            bool queenFlag = false;
+            if (troop.Gender == GenderTypes.Checkers)
             {
-                case UnitTypes.King:
-                    if ((troop.Location.Row - coords.Row) * *2 + (troop.Location.Column - coords.Column) * *2 <= 2) { return true; }
-                    break;
-
-
-                case UnitTypes.Bishop:
-                    if ((troop.Location.Row - coords.Row) * *2 == (troop.Location.Column - coords.Column) * *2) { return true; }
+                lineVectorGenerator(-1, -1, troop, output, troop.Location);
+                lineVectorGenerator(+1, -1, troop, output, troop.Location);
+                lineVectorGenerator(-1, +1, troop, output, troop.Location);
+                lineVectorGenerator(+1, +1, troop, output, troop.Location);
+                return output;
+            }
+            switch (troop.Type) {
                 case UnitTypes.Pawn:
-                    if ((!troop.color&&troop.Location.row- coords.row == 1)||(troop.color&& troop.Location.row - coords.row == -1)) { return true; }
-                    break;
+                    if (!troop.color)
+                    {
+                        if (troop.Location.Row == 6)
+                        {
+                            output.Add(new Coords(troop.Location.Column, 4));
+                        }
+                        output.Add(new Coords(troop.Location.Column, troop.Location.Row - 1));
+                        Coords tempC = new Coords(troop.Location.Column - 1, troop.Location.Row - 1);
+                        Troop temp = gameData.GetTroopFromMap(tempC);
+                        if (!temp.Equals(null))
+                        {
+                            if (temp.color)
+                            {
+                                output.Add(temp.Location);
+                            }
+                        }
+                        tempC.Column += 2;
+                        temp = gameData.GetTroopFromMap(tempC);
+                        if (!temp.Equals(null))
+                        {
+                            if (temp.color)
+                            {
+                                output.Add(temp.Location);
+                            }
+                        }
 
+                    }
+                    else
+                    {
+                        if (troop.Location.Row == 1)
+                        {
+                            output.Add(new Coords(troop.Location.Column, 3));
+                        }
+                        output.Add(new Coords(troop.Location.Column, troop.Location.Row + 1));
+                        Coords tempC = new Coords(troop.Location.Column - 1, troop.Location.Row + 1);
+                        Troop temp = gameData.GetTroopFromMap(tempC);
+                        if (temp.Equals(null))
+                        {
+                            if (!temp.color)
+                            {
+                                output.Add(temp.Location);
+                            }
+                        }
+                        tempC.Column += 2;
+                        temp = gameData.GetTroopFromMap(tempC);
+                        if (temp.Equals(null))
+                        {
+                            if (!temp.color)
+                            {
+                                output.Add(temp.Location);
+                            }
+                        }
+                    }
+                    outputValidator(output, troop);
+                    return output;
+                case UnitTypes.King:
+                    output.Add(new Coords(troop.Location.Column - 1, troop.Location.Row - 1)); output.Add(new Coords(troop.Location.Column, troop.Location.Row - 1)); output.Add(new Coords(troop.Location.Column + 1, troop.Location.Row - 1));
+                    output.Add(new Coords(troop.Location.Column - 1, troop.Location.Row));                                                                            output.Add(new Coords(troop.Location.Column + 1, troop.Location.Row));
+                    output.Add(new Coords(troop.Location.Column - 1, troop.Location.Row + 1)); output.Add(new Coords(troop.Location.Column, troop.Location.Row + 1)); output.Add(new Coords(troop.Location.Column + 1, troop.Location.Row + 1));
+                    outputValidator(output, troop);
+                    return output;
                 case UnitTypes.Knight:
-                    if (troop.Location.Row - coords.Row * *2 + (troop.Location.Column - coords.Column) * *2 == 5) { return true; }
-                    break;
-
+                    output.Add(new Coords(troop.Location.Column - 2, troop.Location.Row - 1)); output.Add(new Coords(troop.Location.Column - 2, troop.Location.Row + 1)); output.Add(new Coords(troop.Location.Column + 2, troop.Location.Row - 1));
+                    output.Add(new Coords(troop.Location.Column + 2, troop.Location.Row + 1)); output.Add(new Coords(troop.Location.Column - 1, troop.Location.Row - 2));
+                    output.Add(new Coords(troop.Location.Column - 1, troop.Location.Row + 2)); output.Add(new Coords(troop.Location.Column + 1, troop.Location.Row - 2)); output.Add(new Coords(troop.Location.Column + 1, troop.Location.Row + 2));
+                    outputValidator(output, troop);
+                    return output;
                 case UnitTypes.Queen:
-                    if ((troop.Location.Row - coords.Row) * *2 == (troop.Location.Column - coords.Column) * *2) { return true; }
-
+                    queenFlag = true;
+                    goto case UnitTypes.Rook;
                 case UnitTypes.Rook:
-                    if (((troop.Location.Row - coords.Row)!=0 && (troop.Location.Column() - coords.Column())==0)|| (troop.Location.Row - coords.Row) == 0 && (troop.Location.Column() - coords.Column()) != 0)) { return true; }
-                    break;
+                    lineVectorGenerator(-1, 0, troop, output, troop.Location);
+                    lineVectorGenerator(+1, 0, troop, output, troop.Location);
+                    lineVectorGenerator(0, -1, troop, output, troop.Location);
+                    lineVectorGenerator(0, +1, troop, output, troop.Location);
+                    if (!queenFlag)
+                    {
+                        return output;
+                    }
+                    goto case UnitTypes.Bishop;
+                case UnitTypes.Bishop:
+                    lineVectorGenerator(-1, -1, troop, output, troop.Location);
+                    lineVectorGenerator(+1, -1, troop, output, troop.Location);
+                    lineVectorGenerator(-1, +1, troop, output, troop.Location);
+                    lineVectorGenerator(+1, +1, troop, output, troop.Location);
+                    return output;
             }
+            return null; //if this happens, con-fucking-ratz!
+        }
 
-            var unitAtTile = gameData.UnitIn(x, y);
-            if (unitAtTile.player = currentPLayer)
+        private void lineVectorGenerator(int xdif, int ydif, Troop troop, List<Coords> output, Coords last)
+        {
+            Coords next = new Coords(last.Column + xdif, last.Row + ydif);
+            if(!(-1 > next.Column && next.Column > 8 || -1 > next.Row && next.Row > 8 || troop.color == gameData.GetTroopFromMap(next).color))
             {
-                isValid = false;
-            }
-            else
-            {
-                if (unit.pacifist)
+                if(troop.Gender == GenderTypes.Checkers)
                 {
-                    isValid = false;
+                    if (troop.color != gameData.GetTroopFromMap(next).color)
+                    {
+                        next.Column += xdif;
+                        next.Row += ydif;
+                        if (!(-1 > next.Column && next.Column > 8 || -1 > next.Row && next.Row > 8 || !gameData.GetTroopFromMap(next).Equals(null)))
+                        {
+                            output.Add(next);
+                        }
+                    }
+                }
+                else if(troop.Gender == GenderTypes.Pacifist)
+                {
+                    if (!gameData.GetTroopFromMap(next).Equals(null))
+                    {
+                        return;
+                    }
+                }
+                output.Add(next);
+                lineVectorGenerator(xdif, ydif, troop, output, next);
+            }
+        }
+
+        private void outputValidator(List<Coords> output, Troop troop)
+        {
+            foreach (Coords coords in output)
+            {
+                if (-1 > coords.Column && coords.Column > 8 || -1 > coords.Row && coords.Row > 8 || troop.color == gameData.GetTroopFromMap(coords).color || troop.color != gameData.GetTroopFromMap(coords).color && troop.Gender == GenderTypes.Pacifist)
+                {
+                    output.Remove(coords);
                 }
             }
-            return isValid;
         }
-
-        public void MoveUnit(int x, int y)
-        {
-            Coords coords = new Coords(x, y);
-            gameData.SetTroopToMap(gameData.GetTroopFromMap(coords), coords);
-            //turn end
-        }
-
 
         public Movements SetChosenPeice(int x, int y)
         {
             Coords coords = new Coords(x, y);
             Troop troop = gameData.GetTroopFromMap(coords);
-            return new Movements(troop, WhereCanMove(troop)) ;
+            foreach(Movements move in LastMoveables)
+            {
+                if (troop.Equals(move.Troop))
+                {
+                    return move;
+                }
+            }
+            return null;
         }
-    }
+
+        public void MoveChosenPiece(int TroopX, int TroopY, int NewX, int NewY)
+        {
+            gameData.SetTroopToMap(gameData.GetTroopFromMap(new Coords(TroopX, TroopY)), new Coords(NewX, NewY));
+        }
+    } 
 
 
 
