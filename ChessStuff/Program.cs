@@ -93,17 +93,25 @@ namespace ChessStuff
             switch (troop.Type)
             {
                 case UnitTypes.King:
-                    
+                    if ((troop.Location.Row - coords.Row) * *2 + (troop.Location.Column - coords.Column) * *2 <= 2) { return true; }
                     break;
-                case UnitTypes.Queen:
-                    break;
+
+
                 case UnitTypes.Bishop:
-                    break;
+                    if ((troop.Location.Row - coords.Row) * *2 == (troop.Location.Column - coords.Column) * *2) { return true; }
                 case UnitTypes.Pawn:
+                    if ((!troop.color&&troop.Location.row- coords.row == 1)||(troop.color&& troop.Location.row - coords.row == -1)) { return true; }
                     break;
+
                 case UnitTypes.Knight:
+                    if (troop.Location.Row - coords.Row * *2 + (troop.Location.Column - coords.Column) * *2 == 5) { return true; }
                     break;
+
+                case UnitTypes.Queen:
+                    if ((troop.Location.Row - coords.Row) * *2 == (troop.Location.Column - coords.Column) * *2) { return true; }
+
                 case UnitTypes.Rook:
+                    if (((troop.Location.Row - coords.Row)!=0 && (troop.Location.Column() - coords.Column())==0)|| (troop.Location.Row - coords.Row) == 0 && (troop.Location.Column() - coords.Column()) != 0)) { return true; }
                     break;
             }
 
