@@ -168,7 +168,6 @@ namespace ChessStuff
         {
             Coords coords = new Coords(x, y);
             Troop troop = gameData.GetTroopFromMap(coords);
-            Movements output;
             foreach(Movements move in LastMoveables)
             {
                 if (troop.Equals(move.Troop))
@@ -177,6 +176,11 @@ namespace ChessStuff
                 }
             }
             return null;
+        }
+
+        public void MoveChosenPiece(int TroopX, int TroopY, int NewX, int NewY)
+        {
+            gameData.SetTroopToMap(gameData.GetTroopFromMap(new Coords(TroopX, TroopY)), new Coords(NewX, NewY));
         }
     } 
 
